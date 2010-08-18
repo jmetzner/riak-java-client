@@ -47,7 +47,7 @@ import com.basho.riak.client.response.StreamHandler;
  * RiakClient and returns the resulting HTTP responses. It is up to RiakClient
  * to interpret the responses and translate them into the appropriate format.
  */
-public class ClientHelper {
+public class ClientHelper implements IClientHelper {
 
     private RiakConfig config;
     private HttpClient httpClient;
@@ -65,8 +65,8 @@ public class ClientHelper {
         this.httpClient = httpClient;
     }
 
-    /**
-     * See {@link RiakClient#getClientId()}
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#getClientId()
      */
     public byte[] getClientId() {
         try {
@@ -76,6 +76,9 @@ public class ClientHelper {
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#setClientId(java.lang.String)
+     */
     public void setClientId(String clientId) {
         if (clientId != null) {
             this.clientId = ClientUtils.encodeClientId(clientId);
@@ -84,9 +87,8 @@ public class ClientHelper {
         }
     }
 
-    /**
-     * See
-     * {@link RiakClient#setBucketSchema(String, com.basho.riak.client.RiakBucketInfo, RequestMeta)}
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#setBucketSchema(java.lang.String, org.json.JSONObject, com.basho.riak.client.request.RequestMeta)
      */
     public HttpResponse setBucketSchema(String bucket, JSONObject schema, RequestMeta meta) {
         if (schema == null) {
@@ -104,9 +106,8 @@ public class ClientHelper {
         return executeMethod(bucket, null, put, meta);
     }
 
-    /**
-     * Same as {@link RiakClient#getBucketSchema(String, RequestMeta)}, except
-     * only returning the HTTP response.
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#getBucketSchema(java.lang.String, com.basho.riak.client.request.RequestMeta)
      */
     public HttpResponse getBucketSchema(String bucket, RequestMeta meta) {
         if (meta == null) {
@@ -118,10 +119,8 @@ public class ClientHelper {
         return listBucket(bucket, meta, false);
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response, and
-     * if streamResponse==true, the response will be streamed back, so the user
-     * is responsible for calling {@link BucketResponse#close()}
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#listBucket(java.lang.String, com.basho.riak.client.request.RequestMeta, boolean)
      */
     public HttpResponse listBucket(String bucket, RequestMeta meta, boolean streamResponse) {
         if (meta == null) {
@@ -145,8 +144,8 @@ public class ClientHelper {
         return executeMethod(bucket, null, get, meta, streamResponse);
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#store(com.basho.riak.client.RiakObject, com.basho.riak.client.request.RequestMeta)
      */
     public HttpResponse store(RiakObject object, RequestMeta meta) {
         if (meta == null) {
@@ -168,8 +167,8 @@ public class ClientHelper {
         return executeMethod(bucket, key, put, meta);
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#fetchMeta(java.lang.String, java.lang.String, com.basho.riak.client.request.RequestMeta)
      */
     public HttpResponse fetchMeta(String bucket, String key, RequestMeta meta) {
         if (meta == null) {
@@ -182,22 +181,8 @@ public class ClientHelper {
         return executeMethod(bucket, key, head, meta);
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response and
-     * allows the response to be streamed.
-     * 
-     * @param bucket
-     *            Same as {@link RiakClient}
-     * @param key
-     *            Same as {@link RiakClient}
-     * @param meta
-     *            Same as {@link RiakClient}
-     * @param streamResponse
-     *            If true, the connection will NOT be released. Use
-     *            HttpResponse.getHttpMethod().getResponseBodyAsStream() to get
-     *            the response stream; HttpResponse.getBody() will return null.
-     * 
-     * @return Same as {@link RiakClient}
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#fetch(java.lang.String, java.lang.String, com.basho.riak.client.request.RequestMeta, boolean)
      */
     public HttpResponse fetch(String bucket, String key, RequestMeta meta, boolean streamResponse) {
         if (meta == null) {
@@ -210,12 +195,15 @@ public class ClientHelper {
         return executeMethod(bucket, key, get, meta, streamResponse);
     }
 
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#fetch(java.lang.String, java.lang.String, com.basho.riak.client.request.RequestMeta)
+     */
     public HttpResponse fetch(String bucket, String key, RequestMeta meta) {
         return fetch(bucket, key, meta, false);
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#stream(java.lang.String, java.lang.String, com.basho.riak.client.response.StreamHandler, com.basho.riak.client.request.RequestMeta)
      */
     public boolean stream(String bucket, String key, StreamHandler handler, RequestMeta meta) throws IOException {
         if (meta == null) {
@@ -237,8 +225,8 @@ public class ClientHelper {
         }
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#delete(java.lang.String, java.lang.String, com.basho.riak.client.request.RequestMeta)
      */
     public HttpResponse delete(String bucket, String key, RequestMeta meta) {
         if (meta == null) {
@@ -249,16 +237,16 @@ public class ClientHelper {
         return executeMethod(bucket, key, delete, meta);
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#walk(java.lang.String, java.lang.String, java.lang.String, com.basho.riak.client.request.RequestMeta)
      */
     public HttpResponse walk(String bucket, String key, String walkSpec, RequestMeta meta) {
         GetMethod get = new GetMethod(ClientUtils.makeURI(config, bucket, key, walkSpec));
         return executeMethod(bucket, key, get, meta);
     }
 
-    /**
-     * Same as {@link RiakClient}, except only returning the HTTP response
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#mapReduce(java.lang.String, com.basho.riak.client.request.RequestMeta)
      */
     public HttpResponse mapReduce(String job, RequestMeta meta) {
         PostMethod post = new PostMethod(config.getMapReduceUrl());
@@ -270,25 +258,22 @@ public class ClientHelper {
         return executeMethod(null, null, post, meta);
     }
 
-    /** @return the installed exception handler or null if not installed */
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#getExceptionHandler()
+     */
     public RiakExceptionHandler getExceptionHandler() {
         return exceptionHandler;
     }
 
-    /**
-     * Install an exception handler. If an exception handler is provided, then
-     * the Riak client will hand exceptions to the handler rather than throwing
-     * them.
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#setExceptionHandler(com.basho.riak.client.response.RiakExceptionHandler)
      */
     public void setExceptionHandler(RiakExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
     }
 
-    /**
-     * Hands exception <code>e</code> to installed exception handler if there is
-     * one or throw it.
-     * 
-     * @return A 0-status {@link HttpResponse}.
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#toss(com.basho.riak.client.response.RiakIORuntimeException)
      */
     public HttpResponse toss(RiakIORuntimeException e) {
         if (exceptionHandler != null) {
@@ -298,6 +283,9 @@ public class ClientHelper {
             throw e;
     }
 
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#toss(com.basho.riak.client.response.RiakResponseRuntimeException)
+     */
     public HttpResponse toss(RiakResponseRuntimeException e) {
         if (exceptionHandler != null) {
             exceptionHandler.handle(e);
@@ -306,16 +294,15 @@ public class ClientHelper {
             throw e;
     }
 
-    /**
-     * Return the {@link HttpClient} used to make requests, which can be
-     * configured.
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#getHttpClient()
      */
     public HttpClient getHttpClient() {
         return httpClient;
     }
 
-    /**
-     * @return The config used to construct the HttpClient connecting to Riak.
+    /* (non-Javadoc)
+     * @see com.basho.riak.client.util.IClientHelper#getConfig()
      */
     public RiakConfig getConfig() {
         return config;

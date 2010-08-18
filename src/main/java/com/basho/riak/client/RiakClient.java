@@ -37,13 +37,14 @@ import com.basho.riak.client.response.WalkResponse;
 import com.basho.riak.client.util.ClientHelper;
 import com.basho.riak.client.util.ClientUtils;
 import com.basho.riak.client.util.Constants;
+import com.basho.riak.client.util.IClientHelper;
 
 /**
  * Primary interface for interacting with Riak via HTTP.
  */
 public class RiakClient {
 
-    private ClientHelper helper;
+    private IClientHelper helper;
 
     public RiakConfig getConfig() {
         return helper.getConfig();
@@ -65,8 +66,7 @@ public class RiakClient {
         this(new RiakConfig(url), clientId);
     }
 
-    // Package protected constructor used for testing
-    RiakClient(ClientHelper helper) {
+    public RiakClient(IClientHelper helper) {
         this.helper = helper;
     }
 
