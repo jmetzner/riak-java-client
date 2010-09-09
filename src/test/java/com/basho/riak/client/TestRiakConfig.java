@@ -21,7 +21,7 @@ public class TestRiakConfig {
 
     @Test public void chomps_ending_slash() {
         final String URL = "url";
-        RiakConfig impl = new RiakConfig(URL + "/");
+        IRiakConfig impl = new RiakConfig(URL + "/");
         assertEquals(URL, impl.getUrl());
 
         impl.setUrl(URL + "/");
@@ -32,12 +32,12 @@ public class TestRiakConfig {
     }
 
     @Test public void builds_correct_url_from_ip_port_and_prefix() {
-        RiakConfig impl = new RiakConfig("ip", "port", "/prefix");
+        IRiakConfig impl = new RiakConfig("ip", "port", "/prefix");
         assertEquals("http://ip:port/prefix", impl.getUrl());
     }
     
     @Test public void calculates_correct_base_url() {
-        RiakConfig impl = new RiakConfig("http://ip:port/path/to/riak");
+        IRiakConfig impl = new RiakConfig("http://ip:port/path/to/riak");
         assertEquals("http://ip:port", impl.getBaseUrl());
         
         impl = new RiakConfig("http://ip:port/prefix");
@@ -60,7 +60,7 @@ public class TestRiakConfig {
     }
 
     @Test public void calculates_correct_base_mapred_url() {
-        RiakConfig impl = new RiakConfig("http://ip:port/path/to/riak");
+        IRiakConfig impl = new RiakConfig("http://ip:port/path/to/riak");
         assertEquals("http://ip:port/mapred", impl.getMapReduceUrl());
 
         impl.setMapReducePath("/path/to/mapred/");

@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.apache.commons.httpclient.HttpClient;
 import org.json.JSONObject;
 
+import com.basho.riak.client.IRiakConfig;
 import com.basho.riak.client.RiakClient;
-import com.basho.riak.client.RiakConfig;
 import com.basho.riak.client.RiakObject;
 import com.basho.riak.client.request.RequestMeta;
 import com.basho.riak.client.response.BucketResponse;
@@ -125,6 +125,6 @@ public interface IClientHelper {
     /**
      * @return The config used to construct the HttpClient connecting to Riak.
      */
-    public abstract RiakConfig getConfig();
+    public abstract IRiakConfig getConfig();
 
 }

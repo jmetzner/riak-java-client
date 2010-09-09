@@ -14,7 +14,6 @@ package com.basho.riak.client;
 
 import java.net.URL;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodRetryHandler;
@@ -26,10 +25,9 @@ import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
  * Riak URL and HttpClient settings. A pre-constructed HttpClient can also be
  * provided.
  */
-public class RiakConfig {
+public class RiakConfig implements IRiakConfig {
 
-    public static Pattern BASE_URL_PATTERN = Pattern.compile("^((?:[^:]*://)?[^/]*)");
-
+    public static final String DEFAULT_PREFIX = "/riak/";
     private String url = null;
     private String baseUrl = null;
     private String mapredPath = "/mapred";
@@ -46,18 +44,18 @@ public class RiakConfig {
 
         this.setUrl(url);
     }
-    
+
     public RiakConfig(URL url) {
-       if (url == null) {
-          throw new IllegalArgumentException();
-       }
-       
-       String protocol = url.getProtocol().toLowerCase();
-       if(!protocol.equals("http") && !protocol.equals("https")) {
-          throw new IllegalArgumentException();
-       }
-       
-       this.setUrl(url.toExternalForm());
+        if (url == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String protocol = url.getProtocol().toLowerCase();
+        if (!protocol.equals("http") && !protocol.equals("https")) {
+            throw new IllegalArgumentException();
+        }
+
+        this.setUrl(url.toExternalForm());
     }
 
     public RiakConfig(String ip, String port, String prefix) {

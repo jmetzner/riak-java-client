@@ -37,6 +37,7 @@ import com.basho.riak.client.response.WalkResponse;
 import com.basho.riak.client.util.ClientHelper;
 import com.basho.riak.client.util.ClientUtils;
 import com.basho.riak.client.util.Constants;
+import com.basho.riak.client.util.FailoverClientHelper;
 import com.basho.riak.client.util.IClientHelper;
 
 /**
@@ -46,24 +47,36 @@ public class RiakClient {
 
     private IClientHelper helper;
 
-    public RiakConfig getConfig() {
+    public IRiakConfig getConfig() {
         return helper.getConfig();
     }
 
-    public RiakClient(RiakConfig config) {
+    public RiakClient(IRiakConfig config) {
         this(config, null);
     }
 
-    public RiakClient(RiakConfig config, String clientId) {
-        helper = new ClientHelper(config, clientId);
+    public RiakClient(IRiakConfig config, String clientId) {
+        if (config instanceof RiakFailoverConfig) {
+            helper = new FailoverClientHelper((RiakFailoverConfig)config, clientId);
+        } else {
+            helper = new ClientHelper(config, clientId);
+        }
     }
 
     public RiakClient(String url) {
-        this(new RiakConfig(url), null);
+        this(url, null);
     }
 
     public RiakClient(String url, String clientId) {
         this(new RiakConfig(url), clientId);
+    }
+    
+    public RiakClient(String[] urlList, String prefix) {
+        this(urlList, prefix, null);
+    }
+    
+    public RiakClient(String[] urlList, String prefix, String clientId) {
+        this(new RiakFailoverConfig(urlList, prefix), clientId);
     }
 
     public RiakClient(IClientHelper helper) {

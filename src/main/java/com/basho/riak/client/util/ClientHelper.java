@@ -30,11 +30,9 @@ import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONObject;
 
-import com.basho.riak.client.RiakClient;
-import com.basho.riak.client.RiakConfig;
+import com.basho.riak.client.IRiakConfig;
 import com.basho.riak.client.RiakObject;
 import com.basho.riak.client.request.RequestMeta;
-import com.basho.riak.client.response.BucketResponse;
 import com.basho.riak.client.response.DefaultHttpResponse;
 import com.basho.riak.client.response.HttpResponse;
 import com.basho.riak.client.response.RiakExceptionHandler;
@@ -49,12 +47,12 @@ import com.basho.riak.client.response.StreamHandler;
  */
 public class ClientHelper implements IClientHelper {
 
-    private RiakConfig config;
+    private IRiakConfig config;
     private HttpClient httpClient;
     private String clientId = null;
     private RiakExceptionHandler exceptionHandler = null;
 
-    public ClientHelper(RiakConfig config, String clientId) {
+    public ClientHelper(IRiakConfig config, String clientId) {
         this.config = config;
         httpClient = ClientUtils.newHttpClient(config);
         setClientId(clientId);
@@ -304,7 +302,7 @@ public class ClientHelper implements IClientHelper {
     /* (non-Javadoc)
      * @see com.basho.riak.client.util.IClientHelper#getConfig()
      */
-    public RiakConfig getConfig() {
+    public IRiakConfig getConfig() {
         return config;
     }
 

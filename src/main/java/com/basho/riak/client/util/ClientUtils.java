@@ -37,6 +37,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.basho.riak.client.IRiakConfig;
 import com.basho.riak.client.RiakClient;
 import com.basho.riak.client.RiakConfig;
 import com.basho.riak.client.RiakLink;
@@ -59,7 +60,7 @@ public class ClientUtils {
      *            specifics.
      * @return A new {@link HttpClient}
      */
-    public static HttpClient newHttpClient(RiakConfig config) {
+    public static HttpClient newHttpClient(IRiakConfig config) {
 
         HttpClient http = config.getHttpClient();
         HttpConnectionManager m;
@@ -98,7 +99,7 @@ public class ClientUtils {
      *            Bucket whose URL to retrieving
      * @return URL to the bucket
      */
-    public static String makeURI(RiakConfig config, String bucket) {
+    public static String makeURI(IRiakConfig config, String bucket) {
         return config.getUrl() + "/" + urlEncode(bucket);
     }
 
@@ -113,7 +114,7 @@ public class ClientUtils {
      *            Key of the object
      * @return URL to the object
      */
-    public static String makeURI(RiakConfig config, String bucket, String key) {
+    public static String makeURI(IRiakConfig config, String bucket, String key) {
         if (key == null)
             return makeURI(config, bucket);
         return makeURI(config, bucket) + "/" + urlEncode(key);
@@ -133,7 +134,7 @@ public class ClientUtils {
      *            link walking or query parameters)
      * @return URL to the object
      */
-    public static String makeURI(RiakConfig config, String bucket, String key, String extra) {
+    public static String makeURI(IRiakConfig config, String bucket, String key, String extra) {
         if (extra == null)
             return makeURI(config, bucket, key);
 

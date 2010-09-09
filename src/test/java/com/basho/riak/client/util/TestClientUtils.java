@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.basho.riak.client.IRiakConfig;
 import com.basho.riak.client.RiakClient;
 import com.basho.riak.client.RiakConfig;
 import com.basho.riak.client.RiakLink;
@@ -42,7 +43,7 @@ public class TestClientUtils {
 
     @Mock RiakClient mockRiakClient;
 
-    RiakConfig config = new RiakConfig();
+    IRiakConfig config = new RiakConfig();
 
     @Test public void newHttpClient_uses_configs_http_client_if_exists() {
         MockitoAnnotations.initMocks(this);

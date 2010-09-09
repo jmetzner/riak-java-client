@@ -36,6 +36,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import com.basho.riak.client.IRiakConfig;
 import com.basho.riak.client.RiakConfig;
 import com.basho.riak.client.RiakObject;
 import com.basho.riak.client.request.RequestMeta;
@@ -47,7 +48,7 @@ import com.basho.riak.client.response.StreamHandler;
 
 public class TestClientHelper {
 
-    final RiakConfig config = new RiakConfig();
+    final IRiakConfig config = new RiakConfig();
     final String bucket = "bucket";
     final String key = "key";
     final String walkSpec = "walkSpec";

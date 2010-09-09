@@ -18,9 +18,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.basho.riak.client.IRiakConfig;
 import com.basho.riak.client.RiakBucketInfo;
 import com.basho.riak.client.RiakClient;
-import com.basho.riak.client.RiakConfig;
 import com.basho.riak.client.RiakObject;
 import com.basho.riak.client.request.RequestMeta;
 import com.basho.riak.client.request.RiakWalkSpec;
@@ -43,13 +43,18 @@ public class PlainClient {
     private RiakClient impl;
 
     /** Connect to Riak using the given configuration. */
-    public static PlainClient getClient(RiakConfig config) {
+    public static PlainClient getClient(IRiakConfig config) {
         return new PlainClient(new RiakClient(config));
     }
 
     /** Connect to Riak using the given URL. */
     public static PlainClient getClient(String url) {
         return new PlainClient(new RiakClient(url));
+    }
+    
+    /** Connect to Riak using the given URL. */
+    public static PlainClient getClient(String[] urlList, String prefix) {
+        return new PlainClient(new RiakClient(urlList, prefix));
     }
 
     /**
