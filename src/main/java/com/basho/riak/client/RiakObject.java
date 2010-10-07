@@ -571,25 +571,39 @@ public class RiakObject {
     public void writeToHttpMethod(HttpMethod httpMethod) {
         // Serialize headers
         String basePath = getBasePathFromHttpMethod(httpMethod);
+        String linkPartSeparator = ", ";
+        int maxHeaderLength = 8192;
         StringBuilder linkHeader = new StringBuilder();
         for (RiakLink link : links) {
-            if (linkHeader.length() > 0) {
-                linkHeader.append(", ");
+            StringBuilder linkHeaderPart = new StringBuilder();
+            if (linkHeaderPart.length() > 0) {
+                linkHeaderPart.append(", ");
             }
-            linkHeader.append("<");
-            linkHeader.append(basePath);
-            linkHeader.append("/");
-            linkHeader.append(link.getBucket());
-            linkHeader.append("/");
-            linkHeader.append(link.getKey());
-            linkHeader.append(">; ");
-            linkHeader.append(Constants.LINK_TAG);
-            linkHeader.append("=\"");
-            linkHeader.append(link.getTag());
-            linkHeader.append("\"");
+            linkHeaderPart.append("<");
+            linkHeaderPart.append(basePath);
+            linkHeaderPart.append("/");
+            linkHeaderPart.append(link.getBucket());
+            linkHeaderPart.append("/");
+            linkHeaderPart.append(link.getKey());
+            linkHeaderPart.append(">; ");
+            linkHeaderPart.append(Constants.LINK_TAG);
+            linkHeaderPart.append("=\"");
+            linkHeaderPart.append(link.getTag());
+            linkHeaderPart.append("\"");
+            
+            if ((Constants.HDR_LINK.length()+linkHeader.length()+linkPartSeparator.length()+linkHeaderPart.length()) < maxHeaderLength) {
+                if (linkHeader.length() > 0) {
+                    linkHeader.append(linkPartSeparator);
+                }
+                linkHeader.append(linkHeaderPart);
+            } else {
+                httpMethod.addRequestHeader(Constants.HDR_LINK, linkHeader.toString());
+                linkHeader = new StringBuilder();
+                linkHeader.append(linkHeaderPart);
+            }
         }
         if (linkHeader.length() > 0) {
-            httpMethod.setRequestHeader(Constants.HDR_LINK, linkHeader.toString());
+            httpMethod.addRequestHeader(Constants.HDR_LINK, linkHeader.toString());
         }
         for (String name : usermeta.keySet()) {
             httpMethod.setRequestHeader(Constants.HDR_USERMETA_REQ_PREFIX + name, usermeta.get(name));
